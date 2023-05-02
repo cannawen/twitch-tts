@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>HK's twitch TTS service</title>
+    <script>
+      let timeoutId;
+
+      function pollMessage() {
+        return fetch("/poll")
+          .then((res) => res.json())
+          .then((res) => {
+            return new Promise((resolve) => {
+              if (res.nextMessage) {
+                const utterance = new SpeechSynthesisUtterance(res.nextMessage);
+                window.speechSynthesis.speak(utterance);
+                utterance.addEventListener("end", (evt) => {
+                  resolve();
+                });
+              } else {
+                resolve();
+              }
+            });
+          });
+      }
+
+      function loop() {
+        try {
+          pollMessage().then(() => {
+            timeoutId = setTimeout(loop, 500);
+          });
+        } catch (error) {
+          loop();
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <button id="start" onClick="loop()" style="font-size: 3em; cursor: pointer">
+      START TTS
+    </button>
+  </body>
+</html>
