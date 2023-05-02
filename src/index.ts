@@ -5,7 +5,7 @@ import path from "path";
 const app = express();
 const port = process.env.PORT || 3000;
 
-const messages: string[] = [];
+let messages: string[] = [];
 
 const STREAMER_USERNAME = "humblekorean";
 
@@ -29,6 +29,11 @@ app.get("/", (req, res) => {
 app.get("/poll", (req, res) => {
   const nextMessage = messages.shift();
   res.status(200).json({ message: nextMessage });
+});
+
+app.get("/clearMessages", (req, res) => {
+  messages = [];
+  res.status(200).send();
 });
 
 app.listen(port, () => {

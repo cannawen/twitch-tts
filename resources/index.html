@@ -45,6 +45,10 @@
         loop();
         document.getElementById("start").style.display = "none";
       }
+
+      function stop() {
+        fetch("/clearMessages");
+      }
     </script>
   </head>
   <body>
@@ -55,6 +59,13 @@
     >
       START TTS
     </button>
-    <div id="message"></div>
+    <div id="message" style="font-size: 3em"></div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <button onClick="stop()" style="cursor: pointer">
+      Clear message queue
+    </button>
   </body>
 </html>
