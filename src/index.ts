@@ -7,14 +7,19 @@ const port = process.env.PORT || 3000;
 
 const messages: string[] = [];
 
+const TWITCH_DISPLAY_NAME = "HumbleKorean";
+
 const client = new tmi.Client({
-  channels: ["humblekorean"],
+  channels: [TWITCH_DISPLAY_NAME],
 });
 
 client.connect();
 
 client.on("message", (channel, tags, message, self) => {
-  messages.push(`${tags["display-name"]} says ${message}`);
+  const displayName: string = tags["display-name"];
+  if (displayName !== TWITCH_DISPLAY_NAME) {
+    messages.push(`${displayName} says ${message}`);
+  }
 });
 
 app.get("/", (req, res) => {
