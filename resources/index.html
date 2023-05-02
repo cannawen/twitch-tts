@@ -9,9 +9,18 @@
           .then((res) => res.json())
           .then((res) => {
             return new Promise((resolve) => {
-              if (res.nextMessage) {
-                const utterance = new SpeechSynthesisUtterance(res.nextMessage);
-                window.speechSynthesis.speak(utterance);
+              const message = res.message;
+              if (message) {
+                const synth = window.speechSynthesis;
+                const voices = synth.getVoices();
+                const utterance = new SpeechSynthesisUtterance(message);
+
+                document.getElementById("message").innerText = message;
+
+                utterance.voice = voices.find(
+                  (voice) => voice.name === "Daniel"
+                );
+                synth.speak(utterance);
                 utterance.addEventListener("end", (evt) => {
                   resolve();
                 });
@@ -31,11 +40,21 @@
           loop();
         }
       }
+
+      function start() {
+        loop();
+        document.getElementById("start").style.display = "none";
+      }
     </script>
   </head>
   <body>
-    <button id="start" onClick="loop()" style="font-size: 3em; cursor: pointer">
+    <button
+      id="start"
+      onClick="start()"
+      style="font-size: 3em; cursor: pointer"
+    >
       START TTS
     </button>
+    <div id="message"></div>
   </body>
 </html>

@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 app.get("/poll", (req, res) => {
   const nextMessage = messages.shift();
-  res.status(200).json({ nextMessage: nextMessage });
+  res.status(200).json({ message: nextMessage });
 });
 
 app.listen(port, () => {
