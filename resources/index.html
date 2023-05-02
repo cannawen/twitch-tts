@@ -1,11 +1,11 @@
 <html>
   <head>
-    <title>HK's twitch TTS service</title>
+    <title>Your twitch TTS service</title>
     <script>
       let timeoutId;
 
       function pollMessage() {
-        return fetch("/poll")
+        return fetch("./poll")
           .then((res) => res.json())
           .then((res) => {
             return new Promise((resolve) => {
@@ -42,8 +42,12 @@
       }
 
       function start() {
+        fetch("./start");
         loop();
         document.getElementById("start").style.display = "none";
+        window.addEventListener("beforeunload", function (e) {
+          fetch("./stop");
+        });
       }
 
       function skipTts() {
@@ -51,7 +55,7 @@
       }
 
       function clearMessageQueue() {
-        fetch("/clearMessageQueue");
+        fetch("./clearMessageQueue");
       }
     </script>
   </head>
@@ -79,11 +83,5 @@
     >
       Clear message queue
     </button>
-    <div>Click "Clear message queue" to remove old messages</div>
-    <div>
-      (The app keeps track of all messages that have not been TTS'd yet, so when
-      you start click "START TTS", it will try to TTS some old messages sent
-      when you were not using this website.)
-    </div>
   </body>
 </html>
