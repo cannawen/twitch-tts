@@ -7,18 +7,18 @@ const port = process.env.PORT || 3000;
 
 const messages: string[] = [];
 
-const TWITCH_DISPLAY_NAME = "HumbleKorean";
+const STREAMER_USERNAME = "humblekorean";
 
 const client = new tmi.Client({
-  channels: [TWITCH_DISPLAY_NAME],
+  channels: [STREAMER_USERNAME],
 });
 
 client.connect();
 
 client.on("message", (channel, tags, message, self) => {
-  const displayName: string = tags["display-name"];
-  if (displayName !== TWITCH_DISPLAY_NAME) {
-    messages.push(`${displayName} says ${message}`);
+  const username = tags["username"];
+  if (username !== STREAMER_USERNAME) {
+    messages.push(`${username} says ${message}`);
   }
 });
 
