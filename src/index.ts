@@ -1,38 +1,22 @@
 import express from "express";
-import tmi from "tmi.js";
 import path from "path";
+import MessageController from "./MessageController";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-let messages: string[] = [];
-
-const STREAMER_USERNAME = "humblekorean";
-
-const client = new tmi.Client({
-  channels: [STREAMER_USERNAME],
-});
-
-client.connect();
-
-client.on("message", (channel, tags, message, self) => {
-  const username = tags["username"];
-  if (username !== STREAMER_USERNAME) {
-    messages.push(`${username} says ${message}`);
-  }
-});
+const hksMessages = new MessageController("humblekorean");
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.join(__dirname, "../resources/index.html"));
 });
 
 app.get("/poll", (req, res) => {
-  const nextMessage = messages.shift();
-  res.status(200).json({ message: nextMessage });
+  res.status(200).json({ message: hksMessages.nextMessage() });
 });
 
 app.get("/clearMessageQueue", (req, res) => {
-  messages = [];
+  hksMessages.clearMessages();
   res.status(200).send();
 });
 
