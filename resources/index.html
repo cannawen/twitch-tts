@@ -46,8 +46,12 @@
         document.getElementById("start").style.display = "none";
       }
 
-      function stop() {
-        fetch("/clearMessages");
+      function skipTts() {
+        window.speechSynthesis.cancel();
+      }
+
+      function clearMessageQueue() {
+        fetch("/clearMessageQueue");
       }
     </script>
   </head>
@@ -64,8 +68,22 @@
     <br />
     <br />
     <br />
-    <button onClick="stop()" style="cursor: pointer">
+    <button onClick="skipTts()" style="font-size: 2em; cursor: pointer">
+      Skip this message
+    </button>
+    <br />
+    <br />
+    <button
+      onClick="clearMessageQueue()"
+      style="font-size: 2em; cursor: pointer"
+    >
       Clear message queue
     </button>
+    <div>Click "Clear message queue" to remove old messages</div>
+    <div>
+      (The app keeps track of all messages that have not been TTS'd yet, so when
+      you start click "START TTS", it will try to TTS some old messages sent
+      when you were not using this website.)
+    </div>
   </body>
 </html>

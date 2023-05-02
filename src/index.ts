@@ -31,7 +31,7 @@ app.get("/poll", (req, res) => {
   res.status(200).json({ message: nextMessage });
 });
 
-app.get("/clearMessages", (req, res) => {
+app.get("/clearMessageQueue", (req, res) => {
   messages = [];
   res.status(200).send();
 });
